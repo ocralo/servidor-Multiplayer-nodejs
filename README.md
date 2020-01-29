@@ -1,4 +1,4 @@
 ## servidor-Multiplayer-nodejs
 
-#librerias utilizadas
+# librerias utilizadas
 https://github.com/websockets/ws#sending-and-receiving-text-data
