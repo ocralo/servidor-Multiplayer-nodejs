@@ -1,10 +1,11 @@
 {
-  "name": "servidor-Multiplayer-nodejs",
+  "name": "servidorMultiplayerNodejs",
   "version": "0.0.1",
   "description": "servidor para juego multijugador",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"node ./server/index.js"
   },
   "repository": {
     "type": "git",
