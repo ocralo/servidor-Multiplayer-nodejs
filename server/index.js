@@ -13,7 +13,7 @@ server.listen(3000, () => {
   console.log("server on port 3000");
 });
 
-//use ws
+//use ws y escucha la coneccion
 wss.on("connection", function(ws) {
   ws.on("message", function(message) {
     console.log("received: %s", message);
