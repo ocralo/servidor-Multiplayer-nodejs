@@ -1,0 +1,23 @@
+{
+  "name": "servidor-Multiplayer-nodejs",
+  "version": "0.0.1",
+  "description": "servidor para juego multijugador",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ocralo/servidor-Multiplayer-nodejs.git"
+  },
+  "keywords": [],
+  "author": "Rodrigo Escobar - Stiven Garcia",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ocralo/servidor-Multiplayer-nodejs/issues"
+  },
+  "homepage": "https://github.com/ocralo/servidor-Multiplayer-nodejs#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
