@@ -1,26 +1,19 @@
-//se llaman la librerias a utilizar
-const http = require("http");
-const express = require("express");
-var WebSocket = require("ws");
+const app = require("express")();
+const server = require("http").Server(app);
+const io = require("socket.io")(server);
 
-//se inicializa express y demas
-const app = express();
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
-
-//se inicializa la aplicación y se le asigna el puerto
-server.listen(3000, () => {
-  console.log("server on port 3000");
+server.listen(7001, () => {
+  console.log("server on port 7001");
 });
 
-//use ws y escucha la coneccion
-wss.on("connection", function(ws) {
-  ws.on("message", function(message) {
-    console.log("received: %s", message);
+app.get("/", function(req, res) {
+  res.sendFile(__dirname + "");
+});
+
+io.on("connection", function(socket) {
+  setInterval(() => socket.emit("news", `${new Date()}`), 1000);
+  socket.emit("news", { hello: "world" });
+  socket.on("my other event", function(data) {
+    console.log(data);
   });
-
-  setInterval(() => ws.send(`${new Date()}`), 1000);
 });
-
-//static file
-app.use(express.static("public"));
