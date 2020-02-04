@@ -7,13 +7,17 @@ server.listen(7001, () => {
 });
 
 app.get("/", function(req, res) {
-  res.sendFile(__dirname + "");
+  res.sendFile("../public/");
 });
 
 io.on("connection", function(socket) {
-  setInterval(() => socket.emit("news", `${new Date()}`), 1000);
-  socket.emit("news", { hello: "world" });
-  socket.on("my other event", function(data) {
-    console.log(data);
+  console.log(socket.client.id);
+  socket.on("user0", function(data) {
+    //console.log(data);
+    socket.emit("user0", `${JSON.stringify(data)}`);
+  });
+  socket.on("user1", function(data) {
+    //console.log(data);
+    socket.emit("user1", `${JSON.stringify(data)}`);
   });
 });
