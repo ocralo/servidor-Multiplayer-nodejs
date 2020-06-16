@@ -1,45 +1,30 @@
-const app = require("express")();
-const server = require("http").Server(app);
-const io = require("socket.io")(server);
+const net = require("net");
+const connectedSockets = new Set();
+const port = process.argv[2] || 9000;
 
-server.listen(7001, () => {
-  console.log("server on port 7001");
-});
+// broadcast to all connected sockets except one
+connectedSockets.broadcast = function (data, except) {
+  console.log(this);
+  for (let sock of this) {
+    if (sock !== except) {
+      sock.write(data);
+    }
+  }
+};
 
-app.get("/", function(req, res) {
-  res.sendFile(
-    "/Volumes/Macintosh HD/Escritorio/Trabajo de grado/Pruebas Unity/servidor-Multiplayer-nodejs/public/index.html"
-  );
-});
+const server = net.createServer((socket) => {
+  connectedSockets.add(socket);
+  socket.write("Echo server:\n"); //saludo
 
-io.on("connection", function(socket) {
-  console.log(socket.client.id);
-  
-  socket.on("user0", function(data) {
-    //console.log(data);
-
-    /* socket.emit(
-      "user0",
-      `${data.playerName},${data.position.x},${data.position.y},${data.position.z},${data.life},${data.id}`
-    ); */
-    io.emit(
-      "user0",
-      `${JSON.stringify(data)
-        .replace(/\"/g, "'")
-        .replace(/"/g, "")}`
-    );
+  socket.on("end", () => {
+    connectedSockets.delete(socket);
   });
-  socket.on("user1", function(data) {
-    console.log(data);
-    /* socket.emit(
-      "user1",
-      `${data.playerName},${data.position.x},${data.position.y},${data.position.z},${data.life},${1}`
-    ); */
-    io.emit(
-      "user1",
-      `${JSON.stringify(data)
-        .replace(/\"/g, "'")
-        .replace(/"/g, "")}`
-    );
+
+  socket.on("data", (data) => {
+    //console.log(data.toString());
+    connectedSockets.broadcast(data, socket);
+    //socket.write(data); //eco de datos
   });
 });
+
+server.listen(port);
