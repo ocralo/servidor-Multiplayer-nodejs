@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <head>
-
   <meta charset="utf-8" />
   <title>WebSocket Test</title>
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  var socket = io.connect('http://localhost:7001');
-  socket.emit('user0', { my: 'data' });
-  socket.on('user0', function (data) {
-    console.log(data);
-  });
-  socket.on('error', function onSocketError(e) {
-        console.log('WebSocket Error ' + error);
+  <script src="./socket.io/socket.io.js"></script>
+  <script>
+    var socket = io.connect("http://localhost:7001");
+    socket.emit("user0", { my: "data" });
+    socket.on("user0", function (data) {
+      console.log(data);
     });
-</script>
+    socket.on("error", function onSocketError(e) {
+      console.log("WebSocket Error " + error);
+    });
+  </script>
 </head>
 
 <body>
-    <h2>WebSocket Test</h2>
-    <div id="output"></div>
-</body>  
+  <h2>WebSocket Test</h2>
+  <div id="output"></div>
+</body>
