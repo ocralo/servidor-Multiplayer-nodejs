@@ -6,7 +6,6 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const configJwt = require("../Config/keyJWTConfig");
-const configBcrypt = require("../Config/keybcryptconfig");
 
 // Load the MySQL pool connection
 const pool = require("../Db/database");

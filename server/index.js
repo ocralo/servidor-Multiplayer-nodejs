@@ -3,6 +3,7 @@ const app = express();
 const server = require("http").createServer(app);
 
 const io = require("socket.io")(server);
+const ioFile = require("./SocketIO/SocketIO")(io)
 
 const multer = require("multer");
 const upload = multer();
@@ -34,21 +35,3 @@ server.listen(7001, () => {
 });
 
 //app.get("/", express.static(__dirname + "/public/index.html"));
-
-io.on("connection", function (socket) {
-  console.log(socket.client.id);
-
-  socket.on("user0", function (data) {
-    io.volatile.emit(
-      "user0",
-      `${JSON.stringify(data).replace(/\"/g, "'").replace(/"/g, "")}`
-    );
-  });
-
-  socket.on("user1", function (data) {
-    io.volatile.emit(
-      "user1",
-      `${JSON.stringify(data).replace(/\"/g, "'").replace(/"/g, "")}`
-    );
-  });
-});
