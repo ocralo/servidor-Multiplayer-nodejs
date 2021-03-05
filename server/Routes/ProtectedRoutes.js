@@ -2,12 +2,15 @@ const express = require("express");
 const protectedRoutes = express.Router();
 const jwt = require("jsonwebtoken");
 
+const configJwt = require("../Config/keyJWTConfig");
+
 protectedRoutes.use((req, res, next) => {
-  const token =
-    req.headers["auth"] || req.headers["authorization"].replace("Bearer ", "");
+  const inToken = req.headers["auth"] || req.headers["authorization"];
+
+  const token = inToken ? inToken.replace("Bearer ", "") : "";
 
   if (token) {
-    jwt.verify(token, app.get("key"), (err, decoded) => {
+    jwt.verify(token, configJwt.key, (err, decoded) => {
       if (err) {
         return res.json({ mensaje: "Token inválida" });
       } else {
@@ -17,7 +20,7 @@ protectedRoutes.use((req, res, next) => {
     });
   } else {
     res.send({
-      mensaje: "Token no proveída.",
+      mensaje: "Token no enviado.",
     });
   }
 });

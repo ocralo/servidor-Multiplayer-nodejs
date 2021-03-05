@@ -3,12 +3,15 @@ const app = express();
 const server = require("http").createServer(app);
 
 const io = require("socket.io")(server);
-const ioFile = require("./SocketIO/SocketIO")(io)
+const ioFile = require("./SocketIO/SocketIO")(io);
 
 const multer = require("multer");
 const upload = multer();
 
 const routes = require("./Routes/Routes");
+const user = require("./Routes/user");
+const game = require("./Routes/game");
+
 const bodyParser = require("body-parser");
 
 app.use(express.static("public"));
@@ -24,6 +27,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(upload.array());
 
 app.use("/", routes);
+app.use("/user", user);
+app.use("/game", game);
 
 //app.use(bodyParser.json());
 
