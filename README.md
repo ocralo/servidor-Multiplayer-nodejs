@@ -6,6 +6,8 @@
 
 - https://colyseus.io/
 
+-https://socket.io/docs/v2/rooms/#Joining-and-leaving
+
 # routes
 
 ### Users
