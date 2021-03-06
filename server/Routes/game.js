@@ -16,11 +16,20 @@ router.get("/about", protectedRoutes, (req, res) => {
 });
 
 //Assignate Points
-router.post("/ponits", protectedRoutes, async (req, res) => {
+router.post("/points", protectedRoutes, async (req, res) => {
   // INSERT INTO Puntuaciones ( fk_estudiante_id, fk_partida_id, puntuacion) VALUES (NULL, '', '', '')
   console.log(req.body);
-  let { idStudent, gameId, point } = req.body;
-  if (!idStudent || !gameId || !point) {
+  console.log("req.decoded", req.decoded);
+  const { idPlayer: idStudent } = req.decoded;
+  let { gameId, point } = req.body;
+  if (!gameId || !point) {
+    if (!Number.isNaN(gameId) || !Number.isNaN(point)) {
+      res.json({
+        message: "Los datos deben ser numeros",
+        error: true,
+      });
+      return;
+    }
     res.json({
       message: "Faltan datos por enviar",
       error: true,
@@ -46,6 +55,7 @@ router.post("/ponits", protectedRoutes, async (req, res) => {
       });
     });
 });
+
 // Create Game.
 router.post("/create", protectedRoutes, async (req, res) => {
   // INSERT INTO partidas (id_partida, nombre_partida, clave_partida, num_jugadores_partida, estado_partida) VALUES ('', '', '', '', '')

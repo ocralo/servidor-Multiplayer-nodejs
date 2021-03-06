@@ -15,4 +15,4 @@
 ### Game
 
 - game/create
--
+- game/point

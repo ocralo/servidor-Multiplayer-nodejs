@@ -15,6 +15,7 @@ protectedRoutes.use((req, res, next) => {
         return res.json({ mensaje: "Token inválida" });
       } else {
         req.decoded = decoded;
+        console.log("decode", decoded);
         next();
       }
     });

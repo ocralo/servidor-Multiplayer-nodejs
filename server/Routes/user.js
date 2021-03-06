@@ -16,6 +16,14 @@ router.get("/about", protectedRoutes, (req, res) => {
   res.send("About this wiki");
 });
 
+// About page route.
+router.get("/create", protectedRoutes, (req, res) => {
+  //INSERT INTO `estudiantes` (, `nombre1_estudiante`, `nombre2_estudiante`, `apellido1_estudiante`, `apellido2_estudiante`, `correo_estudiante`, `edad_estudiante`, `clave_estudiante`, `fk_grupo_id`, `fk_personaje_id`) VALUES (NULL, '', NULL, '', NULL, '', '', '', '', '')
+  const { name1 } = req.body;
+
+  res.send("About this wiki");
+});
+
 // Generate Password bcrypt.
 router.post("/bcrypt", (req, res) => {
   bcrypt.genSalt(saltRounds, (err, salt) => {
@@ -51,6 +59,8 @@ const getUserDB = (emailRequest, passwordRequest, resRequest) => {
           if (res == true) {
             const payload = {
               check: true,
+              idPlayer: resultado[0].id_estudiante,
+              student: true,
             };
             const token = jwt.sign(payload, configJwt.key, {
               expiresIn: 1440,
