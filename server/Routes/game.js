@@ -74,7 +74,7 @@ router.post("/create", protectedRoutes, async (req, res) => {
           console.log(result);
           res.json({
             message: "Partida creada",
-            id: result.insertId,
+            idGame: result.insertId,
             error: false,
           });
         })
