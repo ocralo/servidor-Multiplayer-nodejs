@@ -5,7 +5,12 @@ const jwt = require("jsonwebtoken");
 const configJwt = require("../Config/keyJWTConfig");
 
 protectedRoutes.use((req, res, next) => {
-  const inToken = req.headers["auth"] || req.headers["authorization"];
+  const inToken =
+    req.headers["auth"] ||
+    req.headers["authorization"] ||
+    req.headers["Authorization"];
+
+  console.log("token", inToken);
 
   const token = inToken ? inToken.replace("Bearer ", "") : "";
 

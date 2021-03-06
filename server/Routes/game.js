@@ -15,6 +15,35 @@ router.get("/about", protectedRoutes, (req, res) => {
   res.send("About this wiki");
 });
 
+// About page route.
+router.get("/login", protectedRoutes, (req, res) => {
+  //
+  console.log(req.body);
+  let { name, password } = req.body;
+  SelectDb(`SELECT * FROM partidas WHERE nombre_partida="${name}"`)
+    .then((result) => {
+      bcrypt.compare(password, result[0].clave_partida, function (err, resQ) {
+        if (resQ == true) {
+          res.json({
+            message: "Entrando a partida",
+            error: false,
+          });
+        } else {
+          res.json({
+            message: "Contraseña incorrecta",
+            error: true,
+          });
+        }
+      });
+    })
+    .catch((err) => {
+      res.json({
+        message: "partida no encontrada",
+        error: true,
+      });
+    });
+});
+
 //Assignate Points
 router.post("/points", protectedRoutes, async (req, res) => {
   // INSERT INTO Puntuaciones ( fk_estudiante_id, fk_partida_id, puntuacion) VALUES (NULL, '', '', '')
