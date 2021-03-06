@@ -20,6 +20,15 @@ router.get("/login", protectedRoutes, (req, res) => {
   //
   console.log(req.body);
   let { name, password } = req.body;
+
+  if (!!!name || !!!password) {
+    res.json({
+      message: "Faltan datos por enviar",
+      error: true,
+    });
+    return;
+  }
+
   SelectDb(`SELECT * FROM partidas WHERE nombre_partida="${name}"`)
     .then((result) => {
       bcrypt.compare(password, result[0].clave_partida, function (err, resQ) {
@@ -51,14 +60,7 @@ router.post("/points", protectedRoutes, async (req, res) => {
   console.log("req.decoded", req.decoded);
   const { idPlayer: idStudent } = req.decoded;
   let { gameId, point } = req.body;
-  if (!gameId || !point) {
-    if (!Number.isNaN(gameId) || !Number.isNaN(point)) {
-      res.json({
-        message: "Los datos deben ser numeros",
-        error: true,
-      });
-      return;
-    }
+  if (!!!gameId || !!!point) {
     res.json({
       message: "Faltan datos por enviar",
       error: true,
@@ -66,20 +68,28 @@ router.post("/points", protectedRoutes, async (req, res) => {
     return;
   }
 
+  if (!parseInt(gameId) || !parseInt(point)) {
+    res.json({
+      message: "Los datos deben ser numeros",
+      error: true,
+    });
+    return;
+  }
+
   SelectDb(
-    `INSERT INTO Puntuaciones ( fk_estudiante_id, fk_partida_id, puntuacion) VALUES (${idStudent}, ${gameId}, ${point})`
+    `INSERT INTO Puntuaciones ( fk_estudiante_id, fk_partida_id, puntuacion) VALUES (${idStudent}, ${parseInt(
+      gameId
+    )}, ${parseInt(point)})`
   )
     .then((result) => {
       res.json({
-        message: "Partida creada",
-        id: result.insertId,
+        message: "Puntuacion Subida",
         error: false,
       });
     })
     .catch((err) => {
       res.json({
-        message: "Partida creada",
-        id: result.insertId,
+        message: "Puntuacion no subida",
         error: true,
       });
     });
