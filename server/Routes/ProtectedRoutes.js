@@ -21,6 +21,7 @@ protectedRoutes.use((req, res, next) => {
   } else {
     res.send({
       mensaje: "Token no enviado.",
+      error: true,
     });
   }
 });

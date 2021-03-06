@@ -14,16 +14,48 @@ const protectedRoutes = require("./ProtectedRoutes");
 router.get("/about", protectedRoutes, (req, res) => {
   res.send("About this wiki");
 });
-// About page route.
+
+//Assignate Points
+router.post("/ponits", protectedRoutes, async (req, res) => {
+  // INSERT INTO Puntuaciones ( fk_estudiante_id, fk_partida_id, puntuacion) VALUES (NULL, '', '', '')
+  console.log(req.body);
+  let { idStudent, gameId, point } = req.body;
+  if (!idStudent || !gameId || !point) {
+    res.json({
+      message: "Faltan datos por enviar",
+      error: true,
+    });
+    return;
+  }
+
+  SelectDb(
+    `INSERT INTO Puntuaciones ( fk_estudiante_id, fk_partida_id, puntuacion) VALUES (${idStudent}, ${gameId}, ${point})`
+  )
+    .then((result) => {
+      res.json({
+        message: "Partida creada",
+        id: result.insertId,
+        error: false,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        message: "Partida creada",
+        id: result.insertId,
+        error: true,
+      });
+    });
+});
+// Create Game.
 router.post("/create", protectedRoutes, async (req, res) => {
   // INSERT INTO partidas (id_partida, nombre_partida, clave_partida, num_jugadores_partida, estado_partida) VALUES ('', '', '', '', '')
   console.log(req.body);
-  let { name, password } = req.body;
+  let { name, password, level = 1 } = req.body;
 
   if (!!!name || !!!password) {
     res.json({
       message: "Faltan datos por enviar",
-      party: false,
+      error: true,
     });
     return;
   }
@@ -34,28 +66,30 @@ router.post("/create", protectedRoutes, async (req, res) => {
 
   BcryptPassword(password)
     .then((result) => {
+      // INSERT INTO 'partidas' ('id_partida', 'nombre_partida', 'clave_partida', 'num_jugadores_partida', 'estado_partida', 'puntuacion_total_partidas', 'fk_niveles_id') VALUES (NULL, '', '', '', '', NULL, '')
       SelectDb(
-        `INSERT INTO partidas (nombre_partida, clave_partida, num_jugadores_partida, estado_partida) VALUES ('${name}', '${result}', 2, 1)`
+        `INSERT INTO partidas (nombre_partida, clave_partida, num_jugadores_partida, estado_partida, fk_niveles_id) VALUES ('${name}', '${result}', 2, 1, ${level})`
       )
         .then((result) => {
           console.log(result);
           res.json({
-            message: "err",
-            party: true,
+            message: "Partida creada",
+            id: result.insertId,
+            error: false,
           });
         })
         .catch((err) => {
           console.log(err);
           res.json({
             message: err,
-            party: false,
+            error: true,
           });
         });
     })
     .catch((err) => {
       res.json({
         message: err,
-        party: false,
+        error: true,
       });
     });
 });
@@ -77,6 +111,7 @@ const SelectDb = (sqlSelect) => {
     });
   });
 };
+
 const BcryptPassword = (password) => {
   return new Promise((accep, reject) => {
     bcrypt.genSalt(saltRounds, async (err, salt) => {
