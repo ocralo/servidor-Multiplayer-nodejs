@@ -11,14 +11,9 @@ exports = module.exports = (io) => {
       socket.join(room);
     });
 
-    /* 
-      socket.on("message", ({ room, message }) => {
-        socket.to(room).emit("message", {
-          message,
-          name: "Friend"
-        });
-      });
-    */
+    socket.on("say to someone", (id, msg) => {
+      socket.to(id).emit("my message", msg);
+    });
 
     socket.on("user0", (data) => {
       console.log(data);
