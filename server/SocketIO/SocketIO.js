@@ -1,6 +1,7 @@
 exports = module.exports = (io) => {
   io.on("connection", (socket) => {
     console.log("conection", socket.client.id);
+    //io.emit("point", "hola");
     //socket.emit("say_hi","hola bb")
 
     socket.on("prueba", function (data) {
@@ -8,11 +9,20 @@ exports = module.exports = (io) => {
     });
 
     socket.on("join_room", (room) => {
+      console.log(data);
       socket.join(room);
     });
 
-    socket.on("say to someone", (id, msg) => {
-      socket.to(id).emit("my message", msg);
+    socket.on("pointChange", (data) => {
+      console.log("msg", data);
+
+        io.volatile.emit(
+          "point",
+          `${JSON.stringify(data).replace(/\"/g, "'").replace(/"/g, "")}`
+        );
+        console.log("try");
+
+      //socket.to(id).emit("my message", msg);
     });
 
     socket.on("user0", (data) => {
@@ -29,6 +39,10 @@ exports = module.exports = (io) => {
         "user1",
         `${JSON.stringify(data).replace(/\"/g, "'").replace(/"/g, "")}`
       );
+    });
+
+    socket.on("disconnect", () => {
+      console.log("user disconnected");
     });
   });
 };
