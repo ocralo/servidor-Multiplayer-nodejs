@@ -68,13 +68,13 @@ const getUserDB = (emailRequest, passwordRequest, resRequest) => {
             resRequest.json({
               message: "Autenticación correcta",
               auth: true,
-              err: false,
+              error: false,
               token: token,
             });
           } else {
             resRequest.json({
               message: "Usuario o contraseña incorrectos",
-              err: true,
+              error: true,
               auth: false,
             });
           }
@@ -84,8 +84,8 @@ const getUserDB = (emailRequest, passwordRequest, resRequest) => {
     })
     .catch((err) => {
       resRequest.json({
-        message: "Ocurrio un error",
-        err: true,
+        message: "Usuario o contraseña incorrectos",
+        error: true,
         auth: false,
       });
     });
