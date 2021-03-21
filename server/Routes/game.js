@@ -35,6 +35,7 @@ router.get("/login", protectedRoutes, (req, res) => {
         if (resQ == true) {
           res.json({
             message: "Entrando a partida",
+            player: 2,
             error: false,
           });
         } else {
@@ -124,6 +125,7 @@ router.post("/create", protectedRoutes, async (req, res) => {
           res.json({
             message: "Partida creada",
             idGame: result.insertId,
+            player: 1,
             error: false,
           });
         })

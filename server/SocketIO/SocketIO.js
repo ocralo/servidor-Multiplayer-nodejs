@@ -9,18 +9,22 @@ exports = module.exports = (io) => {
     });
 
     socket.on("join_room", (room) => {
-      console.log(data);
+      console.log("join", room);
       socket.join(room);
     });
 
     socket.on("pointChange", (data) => {
       console.log("msg", data);
+      console.log("room", data.idGame);
 
-        io.volatile.emit(
-          "point",
-          `${JSON.stringify(data).replace(/\"/g, "'").replace(/"/g, "")}`
-        );
-        console.log("try");
+      io.to(data.idGame).emit("point",
+        `${JSON.stringify(data).replace(/\"/g, "'").replace(/"/g, "")}`);
+
+      /* io.volatile.emit(
+        "point",
+        `${JSON.stringify(data).replace(/\"/g, "'").replace(/"/g, "")}`
+      ); */
+      console.log("try");
 
       //socket.to(id).emit("my message", msg);
     });

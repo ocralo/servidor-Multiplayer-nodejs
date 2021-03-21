@@ -4,8 +4,9 @@
   <title>WebSocket Test</title>
   <script src="./socket.io/socket.io.js"></script>
   <script>
-    var socket = io.connect("http://localhost:7001");
+    var socket = io.connect("http://192.168.39.164:7001");
     socket.emit("user0", { my: "data" });
+    socket.emit("join", 9);
     socket.on("user0", function (data) {
       console.log(data);
     });
