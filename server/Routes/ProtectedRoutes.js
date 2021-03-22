@@ -17,7 +17,7 @@ protectedRoutes.use((req, res, next) => {
   if (token) {
     jwt.verify(token, configJwt.key, (err, decoded) => {
       if (err) {
-        return res.json({ mensaje: "Token inválida" });
+        return res.json({ message: "Token inválida", error: true });
       } else {
         req.decoded = decoded;
         console.log("decode", decoded);
@@ -26,7 +26,7 @@ protectedRoutes.use((req, res, next) => {
     });
   } else {
     res.send({
-      mensaje: "Token no enviado.",
+      message: "Token no enviado.",
       error: true,
     });
   }

@@ -16,7 +16,7 @@ router.get("/about", protectedRoutes, (req, res) => {
 });
 
 // About page route.
-router.get("/login", protectedRoutes, (req, res) => {
+router.post("/login", protectedRoutes, (req, res) => {
   //
   console.log(req.body);
   let { name, password } = req.body;
@@ -32,10 +32,13 @@ router.get("/login", protectedRoutes, (req, res) => {
   SelectDb(`SELECT * FROM partidas WHERE nombre_partida="${name}"`)
     .then((result) => {
       bcrypt.compare(password, result[0].clave_partida, function (err, resQ) {
+        console.log(result[0]);
         if (resQ == true) {
           res.json({
             message: "Entrando a partida",
             player: 2,
+            idGame: result[0].id_partida,
+            nameGame: result[0].nombre_partida,
             error: false,
           });
         } else {
@@ -124,6 +127,7 @@ router.post("/create", protectedRoutes, async (req, res) => {
           console.log(result);
           res.json({
             message: "Partida creada",
+            nameGame: name,
             idGame: result.insertId,
             player: 1,
             error: false,
