@@ -11,6 +11,10 @@ const upload = multer();
 const routes = require("./Routes/Routes");
 const user = require("./Routes/user");
 const game = require("./Routes/game");
+const grups = require("./Routes/groups");
+const grades = require("./Routes/grades");
+const teachers = require("./Routes/teachers");
+const institutions = require("./Routes/institutions");
 
 const bodyParser = require("body-parser");
 
@@ -26,9 +30,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // for parsing multipart/form-data
 app.use(upload.array());
 
+//routes
 app.use("/", routes);
 app.use("/user", user);
 app.use("/game", game);
+app.use("/groups", grups);
+app.use("/grades", grades);
+app.use("/teachers", teachers);
+app.use("/institutions", institutions);
 
 //app.use(bodyParser.json());
 

@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../Db/database");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -17,11 +16,49 @@ router.get("/about", protectedRoutes, (req, res) => {
 });
 
 // About page route.
-router.get("/create", protectedRoutes, (req, res) => {
-  //INSERT INTO `estudiantes` (, `nombre1_estudiante`, `nombre2_estudiante`, `apellido1_estudiante`, `apellido2_estudiante`, `correo_estudiante`, `edad_estudiante`, `clave_estudiante`, `fk_grupo_id`, `fk_personaje_id`) VALUES (NULL, '', NULL, '', NULL, '', '', '', '', '')
-  const { name1 } = req.body;
+router.post("/create", (req, res) => {
+  const {
+    nameStudent1,
+    nameStudent2,
+    lastNameStudent1,
+    lastNameStudent2,
+    emailStudent,
+    passwordStudent,
+    ageStudent,
+    idGroup,
+  } = req.body;
 
-  res.send("About this wiki");
+  if (
+    !!!nameStudent1 &&
+    !!!lastNameStudent1 &&
+    !!!emailStudent &&
+    !!!passwordStudent &&
+    !!!ageStudent &&
+    !!!idGroup
+  ) {
+    res.status(324).json({ message: "faltan datos por enviar", error: true });
+  }
+
+  BcryptPassword(passwordStudent)
+    .then((password) => {
+      SelectDb(
+        `INSERT INTO estudiantes ( nombre1_estudiante, nombre2_estudiante, apellido1_estudiante, apellido2_estudiante, correo_estudiante, edad_estudiante, clave_estudiante, fk_grupo_id, fk_personaje_id) VALUES ('${nameStudent1}', '${
+          !!nameStudent2 ? nameStudent2 : ""
+        }', '${lastNameStudent1}', '${
+          lastNameStudent2 ? lastNameStudent2 : ""
+        }', '${emailStudent}', ${ageStudent}, '${password}', ${idGroup}, 1)`
+      )
+        .then((result) => {
+          console.log(result);
+          res.status(200).json({ groups: result, error: false });
+        })
+        .catch((err) => {
+          res.status(500).json({ message: err, error: true });
+        });
+    })
+    .catch((errBcrypt) => {
+      res.status(500).json({ message: errBcrypt, error: true });
+    });
 });
 
 // Generate Password bcrypt.
